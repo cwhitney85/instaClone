@@ -17,6 +17,11 @@ feeds.get('/', (req, res) => {
     })
 })
 
+// Test Route
+feeds.get('/test', (req, res) => {
+  res.send('test')
+})
+
 
 //Create Create Route
 feeds.post('/', async (req, res) => {
