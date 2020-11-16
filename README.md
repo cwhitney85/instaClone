@@ -3,3 +3,4 @@ Instagram Clone Project
 
 Featuring:
 Colin Whitney
+Sarah Alhuriz
