@@ -25,6 +25,11 @@ const feedsController = require('./controllers/feeds.js')
 app.use('/feeds', feedsController)
 
 
+//ROUTE TO GET USERS
+app.get('/users', (req, res) => {
+  res.json(users)
+})
+
 
 //port
 app.listen(PORT, () => {
