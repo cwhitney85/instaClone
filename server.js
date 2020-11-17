@@ -26,6 +26,11 @@ mongoose.connection.once('open', ()=>{
     console.log('connected to mongoose...')
 })
 
+//set up route
+const userController = require('./controllers/user.js')
+app.use('/users', userController)
+
+
 
 // Controllers/Routes
 const feedsController = require('./controllers/feeds.js')
