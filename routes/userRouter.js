@@ -23,6 +23,10 @@ router.post("/register", async (req, res) => {
         return res
             .status(400)
             .json({msg: "Enter the same password twice"})
+
+
+
+                    
     }
     catch(err) {
         res.status(500).json(err)
