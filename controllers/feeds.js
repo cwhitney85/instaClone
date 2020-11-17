@@ -2,8 +2,20 @@ const express = require('express')
 const feeds = express.Router()
 
 
-
+// MODELS
 const Feed = require('../models/feeds.js')
+const feedSeed = require('../models/seed.js')
+
+// SEED rout
+feeds.get('/seed', (req, res) => {
+  Feed.remove(() => {
+      Feed.create(feedSeed, (err, data) => {
+          if (err) console.log(err.message);
+          console.log('added provided seed data')
+          res.redirect('/feeds/');
+      })
+  })
+})
 
 
 
