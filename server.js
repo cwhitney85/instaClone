@@ -14,7 +14,7 @@ mongoose.connection.on('disconnected', () => console.log('mongo disconnected'))
 
 
 // Database connection
-mongoose.connect('mongodb://localhost:27017/feeds', { useNewUrlParser: true })
+mongoose.connect('mongodb://localhost:27017/feeds', { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
 mongoose.connection.once('open', ()=>{
     console.log('connected to mongoose...')
 })
