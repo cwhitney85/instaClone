@@ -1,13 +1,18 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const cors = require("cors")
 const app = express()
-//local variable for testing purposes 
-const users = []
-const PORT = 3003
+//const PORT = 3003
+//environment variable port for heroku 
+const PORT = process.env.PORT || 3003;
+
+
+require("dotenv").config()
+
 
 //middleware
 app.use(express.json())
-
+app.use(cors());
 
 
 // Database Error
@@ -26,18 +31,6 @@ mongoose.connection.once('open', ()=>{
 const feedsController = require('./controllers/feeds.js')
 app.use('/feeds', feedsController)
 
-
-//ROUTE TO GET USERS
-app.get('/users', (req, res) => {
-  res.json(users)
-})
-
-//POST request
-app.post('/users', (res, req) => {
-  const user = {name: req.body.name, password: req.body.password}
-  users.push(user)
-  res.statusCode(201).send
-})
 
 
 //port
