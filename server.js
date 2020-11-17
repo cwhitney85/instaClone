@@ -14,6 +14,8 @@ require("dotenv").config()
 app.use(express.json())
 app.use(cors());
 
+//Connect to Mongo
+const MONGODBURI = process.env.MONGODBURI || 'mongodb://localhost:27017/feeds'
 
 // Database Error
 mongoose.connection.on('error', err => console.log(err.message + ' is Mongod not running?'))
@@ -21,7 +23,7 @@ mongoose.connection.on('disconnected', () => console.log('mongo disconnected'))
 
 
 // Database connection
-mongoose.connect('mongodb://localhost:27017/feeds', { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
+mongoose.connect(MONGODBURI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
 mongoose.connection.once('open', ()=>{
     console.log('connected to mongoose...')
 })
