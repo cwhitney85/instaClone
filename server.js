@@ -1,6 +1,8 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const app = express()
+//local variable for testing purposes 
+const users = []
 const PORT = 3003
 
 //middleware
@@ -28,6 +30,13 @@ app.use('/feeds', feedsController)
 //ROUTE TO GET USERS
 app.get('/users', (req, res) => {
   res.json(users)
+})
+
+//POST request
+app.post('/users', (res, req) => {
+  const user = {name: req.body.name, password: req.body.password}
+  users.push(user)
+  res.statusCode(201).send
 })
 
 
