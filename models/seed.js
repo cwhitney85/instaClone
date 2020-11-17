@@ -6,7 +6,7 @@ feedSeed = [
         "tags": [""],
     },
     {
-        "image": "https://s2.best-wallpaper.net/wallpaper/1920x1440/2001/Lemon-slice-blue-background_1920x1440.jpg",
+        "image": "https://trainthatpooch.com/wp-content/uploads/2017/01/Border-Collie_July_1620-730x510.jpg",
         "description": "HappyStagram!",
         "likes": 0,
         "tags": [""],
