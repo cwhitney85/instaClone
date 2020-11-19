@@ -38,6 +38,7 @@ app.use('/users', userController)
 const feedsController = require('./controllers/feeds.js')
 app.use('/feeds', feedsController)
 
+
 // Index
 app.get('/', (req, res) => {
   res.send('hello')
