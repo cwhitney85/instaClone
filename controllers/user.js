@@ -1,6 +1,3 @@
-module.exports = router
-
-const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const auth = require("../middleware/auth");
@@ -55,17 +52,17 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   try {
-    const { email, password } = req.body;
-
+    const { username, password } = req.body;
+    console.log(req.body)
     // validate
-    if (!email || !password)
+    if (!username || !password)
       return res.status(400).json({ msg: "Not all fields have been entered." });
 
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({ displayName: username });
     if (!user)
       return res
         .status(400)
-        .json({ msg: "No account with this email has been registered." });
+        .json({ msg: "No account with this email or username has been registered." });
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ msg: "Invalid credentials." });
