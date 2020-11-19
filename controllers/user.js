@@ -23,6 +23,16 @@ users.get('/', (req, res) => {
     })
 })
 
+// Find user for profile display
+users.get('/:displayName', (req, res) => {
+  User.findOne({ displayName: req.params.displayName }, (error, foundUser) => {
+    if (error) {
+      res.status(400).json({ error: error.message })
+    }
+    res.status(200).send(foundUser)
+  })
+})
+
 // Create Route
 users.post('/', async (req, res) => {
     User.create(req.body, (error, user) => {

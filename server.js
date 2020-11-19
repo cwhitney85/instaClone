@@ -12,6 +12,7 @@ require("dotenv").config()
 
 //middleware
 app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
 const whitelist = ['http://localhost:3000']
 const corsOptions = {
   origin: function (origin, callback) {
