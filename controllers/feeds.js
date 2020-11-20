@@ -66,5 +66,4 @@ feeds.put('/:id', (req, res) => {
     })
 })
 
-
 module.exports = feeds
