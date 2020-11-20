@@ -1,6 +1,8 @@
+
 const express = require('express')
 const users = express.Router()
 const User = require('../models/userModel.js')
+
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const auth = require("../middleware/auth");
@@ -53,6 +55,7 @@ users.post('/VerifyToken', async (req, res) => {
     const token = req.header("x-auth-token")
     if (!token) return res.json(false)
 
+
     const verified = jwt.verify(token, process.env.JWT_SECRET)
     if (!verified) return res.json(false)
 
@@ -64,6 +67,7 @@ users.post('/VerifyToken', async (req, res) => {
   } catch(error) {
     res.status(400).json({ error: error.message})
   }
+
 })
 
 
