@@ -80,6 +80,41 @@ router.post("/login", async (req, res) => {
   }
 });
 
+//activate email
+exports.activateAccount = (res, req) => {
+  const {token} = req.body;
+  if(token) {
+    jwt.verify(token, process.env.JWT_ACC_ACTIVATE, function(err, decodedToken) {
+      if(err) {
+        return res.status(400).json({error: 'Incorrect or expired link'})
+      }
+      const {email, password, displayName} = decodedToken
+      User.findOne({email}).exec((err, name) => {
+        if(name) {
+          return res.status(400).json({error: "User with this email already exists. "})
+        }
+        let newUser = new User ({name, email, password})
+        newUser.save((err, success) => {
+          if(err) {
+            console.log("Error in signip", err)
+            return res.status(400), json({error: 'Error activating account'})
+          }
+          res.json({
+            message: "Success! You are signed in!"
+          })
+        })
+      }) 
+    })
+  } else {
+    return res.json({error: "Something went wrong"})
+  }
+}
+
+
+//forgot password
+exports.forgotPassword = (req, res) => {
+  
+}
 
 
 router.post("/tokenIsValid", async (req, res) => {

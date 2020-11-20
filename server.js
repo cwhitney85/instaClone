@@ -32,10 +32,18 @@ mongoose.connection.once('open', ()=>{
 const userController = require('./controllers/user.js')
 app.use('/users', userController)
 
+//route for signup and activating an account
+const {signip, activateAccount} = require("./controllers/user.js")
+
+router.post('/signip', signup);
+router.post('/email-activate', activateAccount)
+router.put('/forgot-password', forgotPassword)
+
 
 
 // Controllers/Routes
-const feedsController = require('./controllers/feeds.js')
+const feedsController = require('./controllers/feeds.js');
+const router = require('./controllers/user.js');
 app.use('/feeds', feedsController)
 
 // Index
@@ -49,3 +57,4 @@ app.listen(PORT, () => {
   console.log('listening on', PORT)
 })
 
+module.exports = router
