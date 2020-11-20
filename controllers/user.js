@@ -4,7 +4,7 @@ const User = require('../models/userModel.js')
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const auth = require("../middleware/auth");
-
+// require("dotenv").config()
 
 // router.get('/test',(req, res) => {
 //     res.send("Hello, it's working")
@@ -24,12 +24,17 @@ users.get('/', (req, res) => {
 })
 
 // Find user for profile display
-users.get('/:displayName', (req, res) => {
-  User.findOne({ displayName: req.params.displayName }, (error, foundUser) => {
+users.get('/:id', (req, res) => {
+  User.findById(req.params.id, (error, foundUser) => {
     if (error) {
       res.status(400).json({ error: error.message })
     }
-    res.status(200).send(foundUser)
+    res.status(200).send({
+      displayName: foundUser.displayName,
+      id: foundUser.id,
+      avatar: foundUser.avatar,
+      feeds: foundUser.feeds
+    })
   })
 })
 
@@ -42,6 +47,21 @@ users.post('/', async (req, res) => {
         res.status(200).send(user)
         console.log('new user:', user)
     })
+})
+
+// Check Token
+users.post('/VerifyToken', async (req, res) => {
+  try {
+    const token = req.header("x-auth-token")
+    if (!token) return res.json(false)
+
+    const verified = jwt.verify(token, process.env.SECRET)
+    if (!verified) return res.json(false)
+
+    return res.json(true)
+  } catch(error) {
+    res.status(400).json({ error: error.message})
+  }
 })
 
 // module.exports = router
