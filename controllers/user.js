@@ -10,33 +10,31 @@ require("dotenv").config()
 //     res.send("Hello, it's working")
 // })
 
-users.get('/testing', (req, res) => {
-    res.send('This is the users router now')
-})
 
-users.get('/', (req, res) => {
-    User.find({}, (error, users) => {
-        if (error) {
-            res.status(400).json({ error: error.message })
-        }
-        res.status(200).json(users)
-    })
-})
+
+// users.get('/', (req, res) => {
+//     User.find({}, (error, users) => {
+//         if (error) {
+//             res.status(400).json({ error: error.message })
+//         }
+//         res.status(200).json(users)
+//     })
+// })
 
 // Find user for profile display
-users.get('/:id', (req, res) => {
-  User.findById(req.params.id, (error, foundUser) => {
-    if (error) {
-      res.status(400).json({ error: error.message })
-    }
-    res.status(200).send({
-      displayName: foundUser.displayName,
-      id: foundUser.id,
-      avatar: foundUser.avatar,
-      feeds: foundUser.feeds
-    })
-  })
-})
+// users.get('/:id', (req, res) => {
+//   User.findById(req.params.id, (error, foundUser) => {
+//     if (error) {
+//       res.status(400).json({ error: error.message })
+//     }
+//     res.status(200).send({
+//       displayName: foundUser.displayName,
+//       id: foundUser.id,
+//       avatar: foundUser.avatar,
+//       feeds: foundUser.feeds
+//     })
+//   })
+// })
 
 // Create Route
 users.post('/', async (req, res) => {
@@ -55,8 +53,12 @@ users.post('/VerifyToken', async (req, res) => {
     const token = req.header("x-auth-token")
     if (!token) return res.json(false)
 
-    const verified = jwt.verify(token, process.env.SECRET)
+    const verified = jwt.verify(token, process.env.JWT_SECRET)
     if (!verified) return res.json(false)
+
+    const user = await User.findById(verified.id)
+    console.log(user)
+    if (!user) return res.json(false)
 
     return res.json(true)
   } catch(error) {
@@ -64,7 +66,6 @@ users.post('/VerifyToken', async (req, res) => {
   }
 })
 
-// module.exports = router
 
 
 users.post("/register", async (req, res) => {
@@ -133,6 +134,7 @@ users.post("/login", async (req, res) => {
         displayName: user.displayName,
       },
     });
+    console.log(token)
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -157,12 +159,12 @@ users.post("/login", async (req, res) => {
 //   }
 // });
 
-// users.get("/", auth, async (req, res) => {
-//   const user = await User.findById(req.user);
-//   res.json({
-//     displayName: user.displayName,
-//     id: user._id,
-//   });
-// });
+users.get("/", auth, async (req, res) => {
+  const user = await User.findById(req.user);
+  res.json({
+    displayName: user.displayName,
+    id: user._id,
+  });
+});
 
 module.exports = users;
