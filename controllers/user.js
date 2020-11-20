@@ -1,21 +1,84 @@
-const router = require("express").Router();
+
+const express = require('express')
+const users = express.Router()
+const User = require('../models/userModel.js')
+
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const auth = require("../middleware/auth");
-const User = require("../models/userModel");
+require("dotenv").config()
 
-router.get('/test',(req, res) => {
-    res.send("Hello, it's working")
+// router.get('/test',(req, res) => {
+//     res.send("Hello, it's working")
+// })
+
+
+
+// users.get('/', (req, res) => {
+//     User.find({}, (error, users) => {
+//         if (error) {
+//             res.status(400).json({ error: error.message })
+//         }
+//         res.status(200).json(users)
+//     })
+// })
+
+// Find user for profile display
+// users.get('/:id', (req, res) => {
+//   User.findById(req.params.id, (error, foundUser) => {
+//     if (error) {
+//       res.status(400).json({ error: error.message })
+//     }
+//     res.status(200).send({
+//       displayName: foundUser.displayName,
+//       id: foundUser.id,
+//       avatar: foundUser.avatar,
+//       feeds: foundUser.feeds
+//     })
+//   })
+// })
+
+// Create Route
+users.post('/', async (req, res) => {
+    User.create(req.body, (error, user) => {
+        if (error) {
+            res.status(400).json({ error: error.message })
+        }
+        res.status(200).send(user)
+        console.log('new user:', user)
+    })
+})
+
+// Check Token
+users.post('/VerifyToken', async (req, res) => {
+  try {
+    const token = req.header("x-auth-token")
+    if (!token) return res.json(false)
+
+
+    const verified = jwt.verify(token, process.env.JWT_SECRET)
+    if (!verified) return res.json(false)
+
+    const user = await User.findById(verified.id)
+    console.log(user)
+    if (!user) return res.json(false)
+
+    return res.json(true)
+  } catch(error) {
+    res.status(400).json({ error: error.message})
+  }
+
 })
 
 
-router.post("/register", async (req, res) => {
+
+users.post("/register", async (req, res) => {
   try {
     let { email, password, passwordCheck, displayName } = req.body;
-
+    console.log(req.body)
     // validate
 
-    if (!email || !password || !passwordCheck)
+    if (!email || !password || !passwordCheck )
       return res.status(400).json({ msg: "Not all fields have been entered." });
     if (password.length < 5)
       return res
@@ -49,15 +112,16 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.post("/login", async (req, res) => {
+users.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
-
+    console.log(email, password)
     // validate
     if (!email || !password)
       return res.status(400).json({ msg: "Not all fields have been entered." });
 
     const user = await User.findOne({ email: email });
+    console.log(user)
     if (!user)
       return res
         .status(400)
@@ -74,6 +138,7 @@ router.post("/login", async (req, res) => {
         displayName: user.displayName,
       },
     });
+    console.log(token)
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -81,24 +146,24 @@ router.post("/login", async (req, res) => {
 
 
 
-router.post("/tokenIsValid", async (req, res) => {
-  try {
-    const token = req.header("x-auth-token");
-    if (!token) return res.json(false);
+// users.post("/tokenIsValid", async (req, res) => {
+//   try {
+//     const token = req.header("x-auth-token");
+//     if (!token) return res.json(false);
 
-    const verified = jwt.verify(token, process.env.JWT_SECRET);
-    if (!verified) return res.json(false);
+//     const verified = jwt.verify(token, process.env.JWT_SECRET);
+//     if (!verified) return res.json(false);
 
-    const user = await User.findById(verified.id);
-    if (!user) return res.json(false);
+//     const user = await User.findById(verified.id);
+//     if (!user) return res.json(false);
 
-    return res.json(true);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+//     return res.json(true);
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
 
-router.get("/", auth, async (req, res) => {
+users.get("/", auth, async (req, res) => {
   const user = await User.findById(req.user);
   res.json({
     displayName: user.displayName,
@@ -106,4 +171,4 @@ router.get("/", auth, async (req, res) => {
   });
 });
 
-module.exports = router;
+module.exports = users;

@@ -12,7 +12,19 @@ require("dotenv").config()
 
 //middleware
 app.use(express.json())
-app.use(cors());
+app.use(express.urlencoded({ extended: false }))
+const whitelist = ['http://localhost:3000']
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.includes(origin)) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+app.use(cors(corsOptions))
+// app.use(cors());
 
 //Connect to Mongo
 const MONGODBURI = process.env.MONGODBURI || 'mongodb://localhost:27017/feeds'

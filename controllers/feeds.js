@@ -66,6 +66,7 @@ feeds.put('/:id', (req, res) => {
     })
 })
 
+
 // show route
 feeds.get('/:id', (req, res) => {
   Feed.findById(req.params.id, (error, foundFeed) => {
@@ -75,6 +76,7 @@ feeds.get('/:id', (req, res) => {
     res.status(200).json(foundFeed)
   })
 })
+
 
 
 module.exports = feeds
