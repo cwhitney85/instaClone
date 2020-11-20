@@ -46,6 +46,7 @@ const feedsController = require('./controllers/feeds.js');
 const router = require('./controllers/user.js');
 app.use('/feeds', feedsController)
 
+
 // Index
 app.get('/', (req, res) => {
   res.send('hello')

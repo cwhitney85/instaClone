@@ -1,9 +1,11 @@
+<<<<<<< HEAD
+=======
+const router = require("express").Router();
+>>>>>>> df54bfd87dd54ccebd0ac244075ffc7cb20906e6
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const auth = require("../middleware/auth");
 const User = require("../models/userModel");
-
-const router = require("express").Router()
 
 router.get('/test',(req, res) => {
     res.send("Hello, it's working")
