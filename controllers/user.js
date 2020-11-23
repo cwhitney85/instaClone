@@ -113,14 +113,15 @@ users.post("/register", async (req, res) => {
 });
 
 users.post("/login", async (req, res) => {
+  console.log(req.body)
   try {
-    const { email, password } = req.body;
-    console.log(email, password)
+    const { displayName, password } = req.body;
+    console.log(displayName, password)
     // validate
-    if (!email || !password)
+    if (!displayName || !password)
       return res.status(400).json({ msg: "Not all fields have been entered." });
 
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({ displayName: displayName });
     console.log(user)
     if (!user)
       return res
@@ -134,6 +135,7 @@ users.post("/login", async (req, res) => {
     res.json({
       token,
       user: {
+        user: user,
         id: user._id,
         displayName: user.displayName,
       },
@@ -166,8 +168,9 @@ users.post("/login", async (req, res) => {
 users.get("/", auth, async (req, res) => {
   const user = await User.findById(req.user);
   res.json({
-    displayName: user.displayName,
-    id: user._id,
+    // displayName: user.displayName,
+    // id: user._id,
+    user: user
   });
 });
 
