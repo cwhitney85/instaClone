@@ -13,7 +13,7 @@ require("dotenv").config()
 //middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
-const whitelist = ['http://localhost:3000']
+const whitelist = ['http://localhost:3000', 'https://stark-ocean-08311.herokuapp.com/']
 const corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.includes(origin)) {
