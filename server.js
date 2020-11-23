@@ -14,14 +14,20 @@ require("dotenv").config()
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 const whitelist = ['http://localhost:3000', 'https://stark-ocean-08311.herokuapp.com']
+// const corsOptions = {
+//   origin: function (origin, callback) {
+//     if (whitelist.includes(origin)) {
+//       callback(null, true)
+//     } else {
+//       callback(new Error('Not allowed by CORS'))
+//     }
+//   }
+// }
 const corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.includes(origin)) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
-  }
+  origin: ["https://stark-ocean-08311.herokuapp.com"],
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  preflightContinue: false,
+  optionsSuccessStatus: 204
 }
 app.use(cors(corsOptions))
 // app.use(cors());
