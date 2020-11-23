@@ -168,8 +168,9 @@ users.post("/login", async (req, res) => {
 users.get("/", auth, async (req, res) => {
   const user = await User.findById(req.user);
   res.json({
-    displayName: user.displayName,
-    id: user._id,
+    // displayName: user.displayName,
+    // id: user._id,
+    user: user
   });
 });
 
