@@ -2,8 +2,6 @@ const express = require('express')
 const mongoose = require('mongoose')
 const cors = require("cors")
 const app = express()
-//const PORT = 3003
-//environment variable port for heroku 
 const PORT = process.env.PORT || 3003;
 
 
@@ -14,15 +12,7 @@ require("dotenv").config()
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 const whitelist = ['http://localhost:3000', 'https://stark-ocean-08311.herokuapp.com']
-// const corsOptions = {
-//   origin: function (origin, callback) {
-//     if (whitelist.includes(origin)) {
-//       callback(null, true)
-//     } else {
-//       callback(new Error('Not allowed by CORS'))
-//     }
-//   }
-// }
+
 const corsOptions = {
   origin: ["https://stark-ocean-08311.herokuapp.com"],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
@@ -30,7 +20,7 @@ const corsOptions = {
   optionsSuccessStatus: 204
 }
 app.use(cors(corsOptions))
-// app.use(cors());
+
 
 //Connect to Mongo
 const MONGODBURI = process.env.MONGODBURI || 'mongodb://localhost:27017/feeds'

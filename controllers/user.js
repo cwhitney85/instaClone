@@ -1,42 +1,10 @@
-
 const express = require('express')
 const users = express.Router()
 const User = require('../models/userModel.js')
-
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const auth = require("../middleware/auth");
 require("dotenv").config()
-
-// router.get('/test',(req, res) => {
-//     res.send("Hello, it's working")
-// })
-
-
-
-// users.get('/', (req, res) => {
-//     User.find({}, (error, users) => {
-//         if (error) {
-//             res.status(400).json({ error: error.message })
-//         }
-//         res.status(200).json(users)
-//     })
-// })
-
-// Find user for profile display
-// users.get('/:id', (req, res) => {
-//   User.findById(req.params.id, (error, foundUser) => {
-//     if (error) {
-//       res.status(400).json({ error: error.message })
-//     }
-//     res.status(200).send({
-//       displayName: foundUser.displayName,
-//       id: foundUser.id,
-//       avatar: foundUser.avatar,
-//       feeds: foundUser.feeds
-//     })
-//   })
-// })
 
 // Create Route
 users.post('/', async (req, res) => {
@@ -76,18 +44,17 @@ users.post("/register", async (req, res) => {
   try {
     let { email, password, passwordCheck, displayName } = req.body;
     console.log(req.body)
-    // validate
-
+    
     if (!email || !password || !passwordCheck )
-      return res.status(400).json({ msg: "Not all fields have been entered." });
+      return res.status(400).json({ msg: "Not all fields were completed." });
     if (password.length < 5)
       return res
         .status(400)
-        .json({ msg: "The password needs to be at least 5 characters long." });
+        .json({ msg: "Password must be a minimum 5 characters." });
     if (password !== passwordCheck)
       return res
         .status(400)
-        .json({ msg: "Enter the same password twice for verification." });
+        .json({ msg: "Password verification failed." });
 
     const existingUser = await User.findOne({ email: email });
     if (existingUser)
@@ -119,14 +86,14 @@ users.post("/login", async (req, res) => {
     console.log(displayName, password)
     // validate
     if (!displayName || !password)
-      return res.status(400).json({ msg: "Not all fields have been entered." });
+      return res.status(400).json({ msg: "Not all fields were completed." });
 
     const user = await User.findOne({ displayName: displayName });
     console.log(user)
     if (!user)
       return res
         .status(400)
-        .json({ msg: "No account with this email has been registered." });
+        .json({ msg: "This account does not exist." });
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ msg: "Invalid credentials." });
@@ -147,29 +114,9 @@ users.post("/login", async (req, res) => {
 });
 
 
-
-// users.post("/tokenIsValid", async (req, res) => {
-//   try {
-//     const token = req.header("x-auth-token");
-//     if (!token) return res.json(false);
-
-//     const verified = jwt.verify(token, process.env.JWT_SECRET);
-//     if (!verified) return res.json(false);
-
-//     const user = await User.findById(verified.id);
-//     if (!user) return res.json(false);
-
-//     return res.json(true);
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// });
-
 users.get("/", auth, async (req, res) => {
   const user = await User.findById(req.user);
   res.json({
-    // displayName: user.displayName,
-    // id: user._id,
     user: user
   });
 });
