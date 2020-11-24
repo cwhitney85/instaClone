@@ -24,6 +24,8 @@ A user should be able to update/edit their profile <br/>
 5. A search bar to find other users <br/>
 6. Show pages for posts and profiles <br/>
 
+## WireFrame ![alt text](https://imgur.com/gallery/LVKLjmX)
+
 
 ## Technologies Used: <br>
 - Express
