@@ -1,3 +1,5 @@
+// Much of the authentication done with the help of Devistry tutorial: https://www.youtube.com/watch?v=Rdbs2W6R23c&t=740s&ab_channel=Devistry
+
 const express = require('express')
 const users = express.Router()
 const User = require('../models/userModel.js')
